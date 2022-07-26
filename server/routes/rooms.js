@@ -1,16 +1,19 @@
 import express from 'express'
-import { createRoom, deleteRoom, getAllRooms, getRoom, updateRoom } from '../controller/RoomController.js';
+import { createRoom, deleteRoom, getAllRooms, getRoom, updateRoom, updateRoomAvailability } from '../controller/RoomController.js';
 import {verifyAdmin} from '../utils/verifyToken.js'
 const router=express.Router();
 
 //CREATE
-router.post("/:hotelId",verifyAdmin,createRoom);
+router.post("/:hotelId",createRoom,verifyAdmin);
 
 //UPDATE
-router.put("/:id",verifyAdmin,updateRoom);
+router.put("/:id",updateRoom,verifyAdmin);
+
+//UPDATE availability
+router.put("/availability/:id",updateRoomAvailability);
 
 //DELETE
-router.delete("/:id/:hotelId",verifyAdmin,deleteRoom);
+router.delete("/:id/:hotelId",deleteRoom,verifyAdmin);
 
 //GET
 router.get("/:id",getRoom);

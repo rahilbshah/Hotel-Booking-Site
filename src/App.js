@@ -3,6 +3,7 @@ import Home from "./pages/Home/Home";
 import Hotel from "./pages/Hotel/Hotel";
 import List from "./pages/List/List";
 import './App.css'
+import Login from "./pages/Login/Login";
 function App() {
   return (
     <BrowserRouter>
@@ -10,6 +11,7 @@ function App() {
       <Route path="/" element={<Home/>}/>
       <Route path="/hotels" element={<List/>}/>
       <Route path="/hotels/:id" element={<Hotel/>}/>
+      <Route path="/login" element={<Login/>}/>
     </Routes>
     </BrowserRouter>
   );

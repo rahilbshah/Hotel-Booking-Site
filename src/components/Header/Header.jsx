@@ -1,16 +1,21 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import './Header.css'
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRange } from 'react-date-range';
 import { format } from 'date-fns'
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
+import { SearchContext } from '../../context/SearchContext';
+import { AuthContext } from '../../context/AuthContext';
+
 const Header = ({type}) => {
+
+    const {user}=useContext(AuthContext);
 
     const [destination, setDestination] = useState("");
     const [openDate, setOpenDate] = useState(false)
     const navigate=useNavigate();
-    const [date, setDate] = useState([
+    const [dates, setDates] = useState([
         {
             startDate: new Date(),
             endDate: new Date(),
@@ -33,8 +38,11 @@ const Header = ({type}) => {
         }})
     }
 
+    const {dispatch} =useContext(SearchContext)
+
     const handleSearch=()=>{
-        navigate("/hotels",{state:{destination,date,option}})
+        dispatch({type:"NEW_SEARCH",payload:{destination,dates,option}})
+        navigate("/hotels",{state:{destination,dates,option}})
     }
 
     return (
@@ -70,7 +78,11 @@ const Header = ({type}) => {
                 <p className="headerDesc">
                     Get Rewarded for Your Travels - Unlock Instant Savings of 10%
                 </p>
+                {!user &&
+                 <Link    to={"/login"}>
                 <button className="headerBtn">Sign in / Register</button>
+                 </Link>
+                }
                 <div className="headerSearch">
                     <div className="headerSearchItem">
                         <i className="fa-solid fa-bed headerIcon"></i>
@@ -84,13 +96,13 @@ const Header = ({type}) => {
                     </div>
                     <div className="headerSearchItem">
                         <i className="fa-solid fa-calendar-days headerIcon"></i>
-                        <span onClick={() => {setOpenDate(!openDate); setopenOptions(false)}} className='headerSearchText'>{`${format(date[0].startDate, "dd/MM/yyyy")} To ${format(date[0].endDate, "dd/MM/yyyy")}`}</span>
+                        <span onClick={() => {setOpenDate(!openDate); setopenOptions(false)}} className='headerSearchText'>{`${format(dates[0].startDate, "dd/MM/yyyy")} To ${format(dates[0].endDate, "dd/MM/yyyy")}`}</span>
                         {openDate && <DateRange
                             editableDateInputs={true}
-                            onChange={item => setDate([item.selection])}
+                            onChange={item => setDates([item.selection])}
                             minDate={new Date()}
                             moveRangeOnFirstSelection={false}
-                            ranges={date}
+                            ranges={dates}
                             className='date'
                         />}
                     </div>
