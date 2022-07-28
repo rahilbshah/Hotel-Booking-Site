@@ -11,7 +11,12 @@ export const register=async(req,res)=>{
         const newUser=new User({
             username:req.body.username,
             email:req.body.email,
-            password:hash
+            password:hash,
+            phone:req.body.phone,
+            img:req.body.img,
+            city:req.body.city,
+            isAdmin:req.body.isAdmin,
+            country:req.body.country
         })
 
         const savedUser=await newUser.save();
@@ -33,7 +38,7 @@ export const login=async(req,res)=>{
                 const {password,isAdmin,...otherDetails}=user._doc;
                 res.cookie("access_token",token,{
                     httpOnly:true,
-                }).status(200).json({...otherDetails,token})
+                }).status(200).json({details:{...otherDetails},isAdmin})
             }
         }
     } catch (error) {

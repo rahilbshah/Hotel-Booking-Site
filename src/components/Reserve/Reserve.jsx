@@ -9,7 +9,7 @@ const Reserve = ({ setOpen, hotelId }) => {
 
     const [selectedRooms, setSelectedRooms] = useState([])
     const { dates } = useContext(SearchContext);
-    const { data, loading, error } = useFetch(`room/62dd3484feb1ffdefac4a32e`)
+    const { data } = useFetch(`room/62dd3484feb1ffdefac4a32e`)
     const navigate = useNavigate();
 
 
