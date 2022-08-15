@@ -12,7 +12,7 @@ export const createRoom = async (req, res, next) => {
         $push: { rooms: savedRoom._id },
       });
     } catch (err) {
-      res.status(500).json(error);
+      res.status(500).json(err);
     }
     res.status(200).json(savedRoom);
   } catch (error) {
@@ -54,7 +54,7 @@ export const deleteRoom = async (req, res) => {
     try {
       await Hotel.findByIdAndUpdate(req.params.hotelId, { $pull: { rooms: req.params.id } });
     } catch (err) {
-      res.status(500).json(error);
+      res.status(500).json(err);
     }
     res.status(200).json("Room Has been Deleted");
   } catch (error) {

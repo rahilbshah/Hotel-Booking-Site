@@ -2,8 +2,9 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-// import { AuthContext } from "../../context/AuthContext";
+import { ToastContainer, toast } from 'react-toastify';
 import "./login.scss";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -11,8 +12,7 @@ const Login = () => {
     password: undefined,
   });
 
-  const { loading, error, dispatch } = useContext(AuthContext);
-
+  const { dispatch2 } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,21 +21,49 @@ const Login = () => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    dispatch({ type: "LOGIN_START" });
+    dispatch2({ type: "LOGIN_START" });
     try {
       const res = await axios.post("/auth/login", credentials);
       if (res.data.isAdmin) {
-        dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
-
-        navigate("/");
+        dispatch2({ type: "LOGIN_SUCCESS", payload: res.data.details });
+        toast.success('You are Login Successfully',{
+          position: "bottom-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
       } else {
-        dispatch({
+        dispatch2({
           type: "LOGIN_FAILURE",
           payload: { message: "You are not allowed!" },
         });
+        toast.warn('You are not allowed!', {
+          position: "bottom-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
-    } catch (err) {
-      dispatch({ type: "LOGIN_FAILURE", payload: err.response.data });
+    } catch (error) {
+      dispatch2({ type: "LOGIN_FAILURE", payload: error.response.data });
+      toast.warn('Wrong Username or Password', {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
@@ -56,10 +84,20 @@ const Login = () => {
           onChange={handleChange}
           className="lInput"
         />
-        <button disabled={loading} onClick={handleClick} className="lButton">
+        <button onClick={handleClick} className="lButton">
           Login
         </button>
-        {error && <span>Password is Incorrect</span>}
+        <ToastContainer
+          position="bottom-center"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     </div>
   );

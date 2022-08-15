@@ -2,17 +2,23 @@ import "./newHotel.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import useFetch from "../../hooks/useFetch";
 import { hotelInputs } from "../../formSource";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { DarkModeContext } from "../../context/darkModeContext";
 
 const NewHotel = () => {
   const [files, setFiles] = useState("");
   const [info, setInfo] = useState({});
   const [rooms, setRooms] = useState([]);
+  const navigate = useNavigate();
+  const { darkMode } = useContext(DarkModeContext)
 
-  const { data, loading, error } = useFetch("/rooms");
+  const { data, loading } = useFetch("/rooms");
 
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -25,7 +31,7 @@ const NewHotel = () => {
     );
     setRooms(value);
   };
-  
+
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -52,7 +58,49 @@ const NewHotel = () => {
       };
 
       await axios.post("/hotels", newhotel);
-    } catch (err) {console.log(err)}
+        toast.success('Hotel is Added Successfully',darkMode ? {
+          position: "bottom-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          style: { backgroundColor: "black" }
+        }: {
+          position: "bottom-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      setTimeout(() => {
+        navigate("/hotels")
+      }, 3000);
+
+    } catch (err) { 
+      console.log(err)
+      toast.warn('Write Details Carefully',darkMode ? {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        style: { backgroundColor: "black" }
+      }:{
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+     }
   };
   return (
     <div className="new">
@@ -96,7 +144,10 @@ const NewHotel = () => {
                     onChange={handleChange}
                     type={input.type}
                     placeholder={input.placeholder}
+                    contentEditable="true"
+                    required
                   />
+                  <span>{input.errorMessage}</span>
                 </div>
               ))}
               <div className="formInput">
@@ -112,11 +163,11 @@ const NewHotel = () => {
                   {loading
                     ? "loading"
                     : data &&
-                      data.map((room) => (
-                        <option key={room._id} value={room._id}>
-                          {room.title}
-                        </option>
-                      ))}
+                    data.map((room) => (
+                      <option key={room._id} value={room._id}>
+                        {room.title}
+                      </option>
+                    ))}
                 </select>
               </div>
               <button onClick={handleClick}>Send</button>
@@ -124,6 +175,17 @@ const NewHotel = () => {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };

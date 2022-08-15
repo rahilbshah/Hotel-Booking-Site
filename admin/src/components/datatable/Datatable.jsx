@@ -1,6 +1,6 @@
+/* eslint-disable array-callback-return */
 import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
-import { userColumns, userRows } from "../../datatablesource";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch";
@@ -9,21 +9,36 @@ import axios from "axios";
 const Datatable = ({columns}) => {
   const location=useLocation();
   const path=location.pathname.split("/")[1];
-
   const [list, setList] = useState([])
-  const {data,loading,error}=useFetch(`/${path}`)
-
+  const {data,data2}=useFetch(`/${path}`)
   useEffect(()=>{
     setList(data)
   },[data])
-
-
+  
+  
   const handleDelete = async (id) => {
-    try {
-      await axios.delete(`/${path}/${id}`)
-      setList(list.filter((item) => item._id !== id));
-    } catch (error) {
-      
+    if(path==="rooms"){
+      let hotelId;
+      data2.map((input)=>{
+        input.rooms.map((input2)=>{
+          if(input2===id){
+            hotelId=input._id;
+          }
+        })
+      })
+      try {
+        await axios.delete(`/${path}/${id}/${hotelId}`)
+        setList(list.filter((item) => item._id !== id));
+      } catch (error) {
+        console.log(error);
+      }
+    }else{
+      try {
+        await axios.delete(`/${path}/${id}`)
+        setList(list.filter((item) => item._id !== id));
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
   const listname=path.charAt(0).toUpperCase() + path.slice(1)
@@ -32,13 +47,13 @@ const Datatable = ({columns}) => {
     {
       field: "action",
       headerName: "Action",
-      width: 200,
+      width: 150,
       renderCell: (params) => {
         return (
           <div className="cellAction">
             <div
               className="deleteButton"
-              onClick={() => handleDelete(params.row._id)}
+              onClick={() => handleDelete(params.row._id,params.row.hotelId)}
             >
               Delete
             </div>

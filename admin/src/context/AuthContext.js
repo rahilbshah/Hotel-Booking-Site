@@ -24,7 +24,7 @@ const AuthReducer = (state, action) => {
 }
 
 export const AuthContextProvider=({children})=>{
-    const [state, dispatch] = useReducer(AuthReducer,INITIAL_STATE);
+    const [state, dispatch2] = useReducer(AuthReducer,INITIAL_STATE);
 
 
     useEffect(()=>{
@@ -38,7 +38,7 @@ export const AuthContextProvider=({children})=>{
           user:state.user,
           loading:state.loading,
           error:state.error,
-          dispatch  
+          dispatch2
         }}
         >
             {children}

@@ -2,7 +2,6 @@ import { BrowserRouter,Routes,Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Hotel from "./pages/Hotel/Hotel";
 import List from "./pages/List/List";
-import './App.css'
 import Login from "./pages/Login/Login";
 function App() {
   return (

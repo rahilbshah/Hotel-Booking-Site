@@ -68,6 +68,18 @@
                             border: none;
                             border-bottom: 1px solid gray;
                         }
+                        span{
+                            font-size: 12px;
+                            padding: 3px;
+                            color: red;
+                            display: none;
+                          }
+                          input:invalid ~ span{
+                            display: block;
+                          }
+                        [contentEditable]{
+                            outline: 0px solid transparent;
+                        }
                     }
 
                     button {
@@ -78,7 +90,8 @@
                         color: white;
                         font-weight: bold;
                         cursor: pointer;
-                        margin-top: 10px;
+                        margin-top: 34px;
+                        margin-bottom: 22px;
                     }
                 }
             }
