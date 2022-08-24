@@ -32,6 +32,7 @@
         color: #999;
       }
     }
+
     hr {
       border-color: #333;
     }
@@ -51,25 +52,32 @@
 
   .datatable {
     .datagrid {
-      color: gray;
       border: none;
+      text-align: center;
+      
 
       .viewButton,
       .deleteButton,
       .cellWithStatus {
-        color: gray;
+        padding: 2px 5px;
+        border-radius: 5px;
+        color: red;
         border: none;
+        cursor: pointer;
       }
     }
   }
 
-  input,select,textarea{
-      background-color: transparent;
-      color: white;
+  input,
+  select,
+  textarea {
+    background-color: transparent;
+    color: white;
   }
-  option{
-   background-color: #111;
-      color: white;
+
+  option {
+    background-color: #111;
+    color: white;
   }
-  
+
 }

@@ -1,37 +1,42 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const useFetch = (url) => {
+const useFetch = (url,url2) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [data2,setData2]=useState([])
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const res = await axios.get(url);
+        const res2= await axios.get(url2)
         setData(res.data);
+        setData2(res2.data)
       } catch (err) {
         setError(err);
       }
       setLoading(false);
     };
     fetchData();
-  }, [url]);
+  }, [url,url2]);
 
   const reFetch = async () => {
     setLoading(true);
     try {
       const res = await axios.get(url);
+      const res2= await axios.get(url2)
       setData(res.data);
+      setData2(res2.data);
     } catch (err) {
       setError(err);
     }
     setLoading(false);
   };
 
-  return { data, loading, error, reFetch };
+  return { data, loading, error, reFetch,data2 };
 };
 
 export default useFetch;

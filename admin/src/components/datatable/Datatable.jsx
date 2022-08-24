@@ -74,6 +74,7 @@ const Datatable = ({columns}) => {
         className="datagrid"
         rows={list}
         columns={columns.concat(actionColumn)}
+        experimentalFeatures={{newEditingApi: true}}
         pageSize={9}
         rowsPerPageOptions={[9]}
         checkboxSelection

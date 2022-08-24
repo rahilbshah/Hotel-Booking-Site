@@ -25,7 +25,7 @@ export const updateHotel = async (req, res) => {
 //Delete the Hotel
 export const deleteHotel = async (req, res) => {
     try {
-        const deletedHotel = await Hotel.findByIdAndDelete(req.params.id)
+       await Hotel.findByIdAndDelete(req.params.id)
         res.status(200).json("Hotel Has been Deleted");
     } catch (error) {
         res.status(500).json(error);
@@ -87,6 +87,29 @@ export const countByType = async (req, res, next) => {
         res.status(500).json(error);
     }
 };
+
+//searchByType
+export const searchByType=async(req,res)=>{
+    const types=req.query.type
+    try {
+        const type=await Hotel.find({type:types})
+        res.status(200).json(type)
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
+//searchByType
+export const searchByCity=async(req,res)=>{
+    const types=req.query.type
+    try {
+        const type=await Hotel.find({type:types})
+        res.status(200).json(type)
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
 
 //Room by Id
 export const getHotelRooms=async (req,res,next)=>{

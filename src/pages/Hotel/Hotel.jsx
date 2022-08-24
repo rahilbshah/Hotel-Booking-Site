@@ -16,11 +16,8 @@ const Hotel = () => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false)
-  
 
-  
-  const { data, loading } = useFetch(`/hotels/find/${id}`)
-
+  const { data, loading } = useFetch(`/hotels/find/${id}`,`/hotels/find/${id}`)
   const {dates,option} =useContext(SearchContext)
   const {user}=useContext(AuthContext);
 
@@ -32,9 +29,13 @@ const Hotel = () => {
     const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
     return diffDays;
   }
-
-  const days= dayDifference(dates[0]?.endDate,dates[0]?.startDate)
-
+  let days= dayDifference(dates[0]?.endDate,dates[0]?.startDate)
+  if(days<1 || isNaN(days) ){
+    days=1;
+  }
+  if(option.room === undefined){
+    option.room=1
+  }
   const handleOpen = (i) => {
     setSlideNumber(i);
     setOpen(true);

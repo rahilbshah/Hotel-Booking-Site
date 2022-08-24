@@ -1,10 +1,36 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { SearchContext } from '../../context/SearchContext'
 import useFetch from '../../hooks/useFetch'
 import './PropertyList.css'
 const PropertyList = () => {
-
-  const { data, loading, error } = useFetch("/hotels/countbyType")
-
+  let hotelType="";
+  const { data, loading } = useFetch("/hotels/countbyType","")
+  const {dispatch} =useContext(SearchContext)
+  const navigate=useNavigate();
+  const [destination] = useState("");
+  const [dates] = useState([
+      {
+          startDate: new Date(),
+          endDate: new Date(),
+          key: 'selection'
+      }
+  ]);
+  const [option] = useState(
+    {
+        adult: 1,
+        children: 0,
+        room: 1
+    }
+)
+const handleClick =async(e)=>{
+  hotelType=data[e]?.type
+  // console.log(hotelType);
+  if(hotelType!==""){
+    dispatch({type:"NEW_SEARCH",payload:{destination,dates,option,hotelType}})
+    navigate("/hotels",{state:{destination,dates,option,hotelType}})
+  }
+}
   const images = [
     "https://cf.bstatic.com/xdata/images/xphoto/square300/57584488.webp?k=bf724e4e9b9b75480bbe7fc675460a089ba6414fe4693b83ea3fdd8e938832a6&o=",
     "https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-apartments_300/9f60235dc09a3ac3f0a93adbc901c61ecd1ce72e.jpg",
@@ -12,7 +38,7 @@ const PropertyList = () => {
     "https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-villas_300/dd0d7f8202676306a661aa4f0cf1ffab31286211.jpg",
     "https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-chalet_300/8ee014fcc493cb3334e25893a1dee8c6d36ed0ba.jpg",
   ]
-
+  
   return (
     <div className='pList'>
       {loading ? ("Loading Please Wait...") :
@@ -23,9 +49,10 @@ const PropertyList = () => {
                 src={img}
                 alt=""
                 className="pListImg"
+                onClick={()=>handleClick(i)}
               />
               <div className="pListTitles">
-              <h1>{data[i]?.type}</h1>
+              <h1 onClick={()=>handleClick(i)} style={{cursor:"pointer"}} >{data[i]?.type}</h1>
                   <h2>{data[i]?.count} {data[i]?.type}</h2>
               </div>
             </div>
