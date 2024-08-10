@@ -6,42 +6,24 @@ import { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import axios from "axios";
 
-const Datatable = ({columns}) => {
-  const location=useLocation();
-  const path=location.pathname.split("/")[1];
-  const [list, setList] = useState([])
-  const {data,data2}=useFetch(`/${path}`)
-  useEffect(()=>{
-    setList(data)
-  },[data])
-  
-  
+const Datatable = ({ columns }) => {
+  const location = useLocation();
+  const path = location.pathname.split("/")[1];
+  const [list, setList] = useState([]);
+  const { data } = useFetch(`/${path}`);
+  useEffect(() => {
+    setList(data);
+  }, [data]);
+
   const handleDelete = async (id) => {
-    if(path==="rooms"){
-      let hotelId;
-      data2.map((input)=>{
-        input.rooms.map((input2)=>{
-          if(input2===id){
-            hotelId=input._id;
-          }
-        })
-      })
-      try {
-        await axios.delete(`/${path}/${id}/${hotelId}`)
-        setList(list.filter((item) => item._id !== id));
-      } catch (error) {
-        console.log(error);
-      }
-    }else{
-      try {
-        await axios.delete(`/${path}/${id}`)
-        setList(list.filter((item) => item._id !== id));
-      } catch (error) {
-        console.log(error);
-      }
+    try {
+      await axios.delete(`/${path}/${id}`);
+      setList(list.filter((item) => item._id !== id));
+    } catch (error) {
+      console.log(error);
     }
   };
-  const listname=path.charAt(0).toUpperCase() + path.slice(1)
+  const listname = path.charAt(0).toUpperCase() + path.slice(1);
 
   const actionColumn = [
     {
@@ -53,7 +35,7 @@ const Datatable = ({columns}) => {
           <div className="cellAction">
             <div
               className="deleteButton"
-              onClick={() => handleDelete(params.row._id,params.row.hotelId)}
+              onClick={() => handleDelete(params.row._id)}
             >
               Delete
             </div>
@@ -74,11 +56,11 @@ const Datatable = ({columns}) => {
         className="datagrid"
         rows={list}
         columns={columns.concat(actionColumn)}
-        experimentalFeatures={{newEditingApi: true}}
+        experimentalFeatures={{ newEditingApi: true }}
         pageSize={9}
         rowsPerPageOptions={[9]}
         checkboxSelection
-        getRowId={row=>row._id}
+        getRowId={(row) => row._id}
       />
     </div>
   );

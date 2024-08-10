@@ -16,11 +16,11 @@ export const register=async(req,res)=>{
 export const login=async(req,res)=>{
     try {
         const user=await User.findOne({username:req.body.username})
-        if(!user) res.status(404).json("User Does not Exist")
+        if(!user) res.status(404).json("User Does not Exist") 
         else{
-            const validity=await bcrypt.compareSync(req.body.password,user.password)
+            const validity=bcrypt.compareSync(req.body.password,user.password)
             if(!validity){
-               return res.status(400).json("Wrong Password")
+               return res.status(400).json("Wrong Password");
             }else{
                 const token=jwt.sign({id:user._id,isAdmin:user.isAdmin},process.env.JWT,{expiresIn:"5d"})
                 const {password,...otherDetails}=user._doc;

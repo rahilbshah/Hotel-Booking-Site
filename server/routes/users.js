@@ -10,16 +10,16 @@ const router=express.Router();
 
 
 //UPDATE
-router.put("/:id",updateUser,verifyUser);
+router.put("/:id",verifyUser,updateUser);
 
 //DELETE
-router.delete("/:id",deleteUser,verifyUser);
+router.delete("/:id",verifyUser,deleteUser);
 
 //GET
-router.get("/:id",getUser,verifyUser);
+router.get("/:id",verifyUser,getUser);
 
 //GET ALL
-router.get("/",getUsers,verifyAdmin);
+router.get("/",verifyAdmin,getUsers);
 
 
 export default router;

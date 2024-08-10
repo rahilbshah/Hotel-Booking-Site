@@ -21,7 +21,8 @@ const List = () => {
   const [max, setMax] = useState(undefined)
   const { dispatch } = useContext(SearchContext)
 
-  const { data, loading, data2 } = useFetch(`/hotels?city=${destination}&min=${min || 0}&max=${max || 100000000}`, `hotels?type=${hotelType}`)
+  const { data, loading, data2 } = useFetch(`/hotels?city=${destination}&min=${min || 0}&max=${max || 100000000}`, `hotels?type=${hotelType}`,"")
+
   const handleClick = () => {
     dispatch({ type: "NEW_SEARCH", payload: { destination, dates, option } })
   }

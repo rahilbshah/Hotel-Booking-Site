@@ -2,9 +2,9 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 import "./login.scss";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -21,20 +21,21 @@ const Login = () => {
 
   const handleClick = async (e) => {
     e.preventDefault();
+    const toastOption = {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    };
     dispatch2({ type: "LOGIN_START" });
     try {
       const res = await axios.post("/auth/login", credentials);
-      if (res.data.isAdmin) {
+      if (res.data.details.isAdmin) {
         dispatch2({ type: "LOGIN_SUCCESS", payload: res.data.details });
-        toast.success('You are Login Successfully',{
-          position: "bottom-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success("You are Login Successfully", toastOption);
         setTimeout(() => {
           navigate("/");
         }, 3000);
@@ -43,27 +44,11 @@ const Login = () => {
           type: "LOGIN_FAILURE",
           payload: { message: "You are not allowed!" },
         });
-        toast.warn('You are not allowed!', {
-          position: "bottom-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.warn("You are not allowed!", toastOption);
       }
     } catch (error) {
       dispatch2({ type: "LOGIN_FAILURE", payload: error.response.data });
-      toast.warn('Wrong Username or Password', {
-        position: "bottom-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.warn("Wrong Username or Password", toastOption);
     }
   };
 

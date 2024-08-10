@@ -17,11 +17,11 @@ const Hotel = () => {
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false)
 
-  const { data, loading } = useFetch(`/hotels/find/${id}`,`/hotels/find/${id}`)
+  const { data, loading } = useFetch(`/hotels/find/${id}`,`/hotels/find/${id}`,`/hotels/find/${id}`)
   const {dates,option} =useContext(SearchContext)
   const {user}=useContext(AuthContext);
-
   const navigate=useNavigate();
+  // console.log(data);
   
   const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
   function dayDifference(date1, date2) {
@@ -43,26 +43,32 @@ const Hotel = () => {
 
   const handleMove = (direction) => {
     let newSlideNumber;
-
     if (direction === "l") {
-      newSlideNumber = slideNumber === 0 ? data.photos.length -1 : slideNumber - 1;
-    } else {
-      newSlideNumber = slideNumber === data.photos.length -1 ? 0 : slideNumber + 1;
+      newSlideNumber = slideNumber === 0 ? data.photos?.length - 1 : slideNumber - 1;
+    } else if (direction === "r") {
+      newSlideNumber = slideNumber === data.photos?.length - 1 ? 0 : slideNumber + 1;
     }
-
     setSlideNumber(newSlideNumber)
   };
 
   const handleClick=()=>{
+    // console.log(data._id);
     if(user){
       setOpenModal(true)
     }else{
       navigate("/login")
     }
   }
+  document.addEventListener("keydown",(e)=>{
+    if(e.key==="ArrowLeft"){
+      handleMove("l")
+    }else if(e.key==="ArrowRight"){
+      handleMove("r")
+    }
+  })
 
   return (
-    <div>
+    <div style={{width:"96%"}}>
       <Navbar />
       <Header type="list" />
       {loading ? ("Loading Please Wait...") : (<> <div className="hotelContainer">
@@ -123,7 +129,7 @@ const Hotel = () => {
         <MailList />
         <Footer />
       </div> </>)}
-      {openModal && <Reserve setOpen={setOpenModal} hotelId={id}/>}
+      {openModal && <Reserve setOpen={setOpenModal} hotelId={data._id}/>}
     </div>
   );
 };

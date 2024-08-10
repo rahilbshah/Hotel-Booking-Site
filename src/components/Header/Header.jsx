@@ -5,7 +5,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRange } from 'react-date-range';
 import { format } from 'date-fns'
 import { useNavigate,Link } from "react-router-dom";
-import { SearchContext } from '../../context/SearchContext';
+import { SearchContext } from '../../context/SearchContext';    
 import { AuthContext } from '../../context/AuthContext';
 
 const Header = ({type}) => {

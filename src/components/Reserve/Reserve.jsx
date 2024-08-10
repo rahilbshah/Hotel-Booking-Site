@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 const Reserve = ({ setOpen, hotelId }) => {
     const [selectedRooms, setSelectedRooms] = useState([])
     const { dates } = useContext(SearchContext);
-    const { data } = useFetch(`room/${hotelId}`, `room/${hotelId}`)
+    const { data } = useFetch(`room/${hotelId}`, `room/${hotelId}`, `room/${hotelId}`)
     const navigate = useNavigate();
 
     const getDatesInRange = (startDate, endDate) => {
@@ -27,7 +27,7 @@ const Reserve = ({ setOpen, hotelId }) => {
         return dates;
     }
 
-    const alldates = getDatesInRange(dates[0].startDate, dates[0].endDate);
+    const alldates = getDatesInRange(dates[0]?.startDate, dates[0]?.endDate);
 
     const isAvailable = (roomNumber) => {
         const isFound = roomNumber.unavailableDates.some((date) =>
